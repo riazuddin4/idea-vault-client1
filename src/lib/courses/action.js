@@ -1,0 +1,170 @@
+
+"use server";
+
+import { headers } from "next/headers";
+import { auth } from "../auth";
+
+export const addIdeas = async (FormData) => {
+  const { token } = await auth.api.getToken({
+    headers: await headers(),
+  });
+
+  const modifiedFormData = Object.fromEntries(FormData.entries());
+  console.log(modifiedFormData);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideas`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: JSON.stringify({...modifiedFormData, favByUsers: []}),
+  });
+  console.log('response', res);
+  return res
+
+};
+
+export const createCommentIdeas = async (FormData) => {
+  const { token } = await auth.api.getToken({
+    headers: await headers(),
+  });
+
+  const commentFormData = Object.fromEntries(FormData.entries());
+  console.log(commentFormData);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: JSON.stringify(commentFormData),
+  });
+  console.log('response', res);
+
+  if (!res.ok) return null;
+  return res.json();
+};
+
+export const favIdea = async (ideaId, userEmail) => {
+  const { token } = await auth.api.getToken({
+    headers: await headers(),
+  });
+
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/ideas/${ideaId}/favorite`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(userEmail),
+    }
+  );
+
+  return await res.json();
+};
+
+export const updateIdea = async (ideaId, data) => {
+  const { token } = await auth.api.getToken({
+    headers: await headers(),
+  });
+
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/ideas/${ideaId}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    }
+  );
+
+  return await res.json();
+};
+
+// export const createFavoritesIdeas = async (FormData) => {
+//   const { token } = await auth.api.getToken({
+//     headers: await headers(),
+//   });
+
+//   const favoritesFormData = Object.fromEntries(FormData.entries());
+//   console.log(favoritesFormData);
+//   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/favorites`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "Authorization": `Bearer ${token}`,
+//     },
+//     body: JSON.stringify(favoritesFormData),
+//   });
+//   console.log('response', res);
+
+//   if (!res.ok) return null;
+//   return res.json();
+// };
+
+// export const updateIdeas = async (id) => {
+//   const { token } = await auth.api.getToken({
+//     headers: await headers(),
+//   });
+//   const res = await fetch(`NEXT_PUBLIC_API_URL/${_id}`, {
+//     method: 'PATCH',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       "Authorization": `Bearer ${token}`,
+//     },
+//     body: JSON.stringify(mongoidea)
+//   })
+
+//   const data = await res.json()
+//   console.log(data)
+// };
+
+
+
+export const deleteEnrollment = async (id) => {
+  const { token } = await auth.api.getToken({
+    headers: await headers(),
+  });
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/enrollments/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  //   console.log(data);
+
+  return data;
+};
+
+
+
+
+
+
+
+export async function getUsersList() {
+  const { token } = await auth.api.getToken({
+    headers: await headers(),
+  });
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  return res.json();
+}
+
+
+
