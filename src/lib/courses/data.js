@@ -45,20 +45,20 @@ export const fetchInteractions = async (email) => {
     return [];
   }
 };
-// export const fetchFavorites = async (email) => {
-//   if (!email) return [];
-//   // console.log("Fetching favorites for email:", email);
-//   try {
-//     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/favorites?email=${email}`);
-//     if (!res.ok) throw new Error("Failed to fetch data");
-//     const data = await res.json();
-//     // console.log(data);
-//     return data || [];
-//   } catch (error) {
-//     console.error(error);
-//     return [];
-//   }
-// };
+export const fetchFavorites = async (email) => {
+  if (!email) return [];
+  // console.log("Fetching favorites for email:", email);
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/favorites?email=${email}`);
+    if (!res.ok) throw new Error("Failed to fetch data");
+    const data = await res.json();
+    // console.log(data);
+    return data || [];
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
 
 export async function getDashboard(email) {
   const res = await fetch(
