@@ -170,7 +170,7 @@ export async function getUsersList() {
 
 
 export const getUserPro = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/usersPro`, {
     cache: "no-store",
   });
 

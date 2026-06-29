@@ -56,12 +56,12 @@ export default async function DashboardSidebar() {
         ],
 
         admin: [
-            { icon: ChartArea, label: "Overview", link: "/dashboard/admin" },
+            { icon: ChartArea, label: "Home", link: "/dashboard/admin" },
             { icon: User2, label: "User Manage", link: "/dashboard/admin/users" },
             {
                 icon: BiMoney,
-                label: "Transaction",
-                link: "/dashboard/admin/transaction",
+                label: "Profile",
+                link: "/dashboard/admin/profile",
             },
         ],
     };

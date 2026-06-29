@@ -3,11 +3,18 @@ import { ArrowRight } from "lucide-react";
 import FeaturedCard from "./FeaturedCard";
 import { fetchFeaturedCourses } from "@/lib/courses/data";
 import Link from "next/link";
+import LessonsGrid from "./LessonsGrid";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 
 const FeaturedCourses = async () => {
     const courses = await fetchFeaturedCourses();
+    const session = await auth.api.getSession({
+        headers: await headers() // you need to pass the headers object.
+    })
     // console.log(courses);
+    console.log(session, "server session")
 
     return (
         <section className="py-24">
@@ -21,21 +28,30 @@ const FeaturedCourses = async () => {
                         </p>
                     </div>
                     <Link href="/ideas">
-                    <Button
-                        variant="flat"
-                        color="primary"
-                        className="rounded-full font-bold group"
-                    >
-                        View All Lesson <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </Button>
+                        <Button
+                            variant="flat"
+                            color="primary"
+                            className="rounded-full font-bold group"
+                        >
+                            View All Lesson <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </Button>
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {
                         courses?.map((course) => <FeaturedCard key={course._id} course={course} />)
                     }
 
+                </div> */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {courses?.map((course) => (
+                        <LessonsGrid
+                            key={course._id}
+                            course={course}
+                            userIsPremium={session?.user?.plan} // or pass from parent
+                        />
+                    ))}
                 </div>
 
 
